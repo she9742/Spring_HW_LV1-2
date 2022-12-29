@@ -24,6 +24,11 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum userRoleEnum;
+
+
 //    @OneToMany
 //    List<Blog> blogList = new ArrayList<>(); // 외래키!! 외래키는 블로그에서 유저아이디를 외래키로 가지고 있어
     //단방향으로 가능하면 단방향으로 하는 것이 좋다 그리고 ManyToOne이 우선이다? -> 그러면 얘는 없어도 되는 건가?!
@@ -33,10 +38,21 @@ public class User {
     public User(SignupRequestDto requestDto){ //회원가입 때 받은 정보를 디티오에 담아서 넘겨준다!
         this.username = requestDto.getUsername();
         this.password = requestDto.getPassword();
+        this.userRoleEnum = requestDto.getUserRoleEnum();
     }
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
+//    public User(String username, String password, UserRoleEnum userRoleEnum) {
+//    }
+//
+//    public User(String username, String password ) {
+//        this.username = username;
+//        this.password = password;
+//
+//    }
+
+//    public User(String username, String password, UserRoleEnum userRoleEnum) {
+//        this.username = username;
+//        this.password = password;
+//        this.userRoleEnum = userRoleEnum;
+//    }
 }

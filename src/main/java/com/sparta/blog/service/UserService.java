@@ -4,6 +4,7 @@ package com.sparta.blog.service;
 import com.sparta.blog.dto.LoginRequestDto;
 import com.sparta.blog.dto.SignupRequestDto;
 import com.sparta.blog.entity.User;
+import com.sparta.blog.entity.UserRoleEnum;
 import com.sparta.blog.jwt.JwtUtil;
 import com.sparta.blog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +22,14 @@ public class UserService {
     private  final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
+
+    private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
+
     @Transactional
     public String signup(SignupRequestDto signupRequestDto) {
         String username = signupRequestDto.getUsername();
-        String password = signupRequestDto.getPassword();
+//        String password = signupRequestDto.getPassword();
+
 
         // 회원 중복 확인
         Optional<User> found = userRepository.findByUsername(username);
@@ -32,7 +37,24 @@ public class UserService {
             throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
         }
 
-        User user = new User(username, password);
+//        UserRoleEnum userRoleEnum = UserRoleEnum.USER;
+//        if (signupRequestDto.isAdmin()) {
+//            if (!(ADMIN_TOKEN).equals(signupRequestDto.getAdminToken())){
+//                throw new IllegalArgumentException("관리자 암호가 달라서 등록이 불가능합니다.");
+//            }
+//            userRoleEnum = UserRoleEnum.ADMIN;
+//        }
+        if(signupRequestDto.getAdminToken().equals(ADMIN_TOKEN)){ //회원가입 dto에 저장된 토큰이랑
+            signupRequestDto.setUserRoleEnum(UserRoleEnum.ADMIN);//admin 권한 넣어줘 디티오에
+
+        }else if(signupRequestDto.getAdminToken().equals("")){
+            signupRequestDto.setUserRoleEnum(UserRoleEnum.USER);
+
+        }else{
+            throw new IllegalArgumentException("토큰이 일치하지 않습니다.");
+        }
+
+        User user = new User(signupRequestDto );
         userRepository.save(user);
         return "success";
     }
@@ -51,7 +73,7 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername()));
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(),user.getUserRoleEnum()));
     }
 
 

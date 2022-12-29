@@ -38,8 +38,8 @@ public class BolgController {
     }
 
     @DeleteMapping("/api/blogs/{id}") //삭제
-    public String deleteBlog(@PathVariable Long id, @RequestBody BlogRequestDto requestDto, HttpServletRequest request) {
-        return blogService.deleteBlog(id, requestDto, request);
+    public String deleteBlog(@PathVariable Long id,HttpServletRequest request) {
+        return blogService.deleteBlog(id, request);
     }
 
 }

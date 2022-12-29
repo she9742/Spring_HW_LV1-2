@@ -1,5 +1,6 @@
 package com.sparta.blog.dto;
 
+import com.sparta.blog.entity.UserRoleEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,8 +18,13 @@ public class SignupRequestDto {
 
 
     @Size(min= 8, max= 15)
-    @Pattern(regexp="^[a-zA-Z0-9]*$")
+    @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$)")
     private String password;
+
+//    private boolean admin = false;
+    private String adminToken = "";
+
+    private UserRoleEnum userRoleEnum;
 
 
 }
