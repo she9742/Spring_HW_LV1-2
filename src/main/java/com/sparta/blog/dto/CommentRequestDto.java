@@ -8,8 +8,6 @@ import lombok.Setter;
 @Setter
 public class CommentRequestDto {
 
-    private String title;
-    private String username;
     private String contents;
 
 }
