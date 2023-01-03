@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
-    private  final UserRepository userRepository;
+    private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
 
@@ -44,23 +44,23 @@ public class UserService {
 //            }
 //            userRoleEnum = UserRoleEnum.ADMIN;
 //        }
-        if(signupRequestDto.getAdminToken().equals(ADMIN_TOKEN)){ //회원가입 dto에 저장된 토큰이랑
+        if (signupRequestDto.getAdminToken().equals(ADMIN_TOKEN)) { //회원가입 dto에 저장된 토큰이랑
             signupRequestDto.setUserRoleEnum(UserRoleEnum.ADMIN);//admin 권한 넣어줘 디티오에
 
-        }else if(signupRequestDto.getAdminToken().equals("")){
+        } else if (signupRequestDto.getAdminToken().equals("")) {
             signupRequestDto.setUserRoleEnum(UserRoleEnum.USER);
 
-        }else{
+        } else {
             throw new IllegalArgumentException("토큰이 일치하지 않습니다.");
         }
 
-        User user = new User(signupRequestDto );
+        User user = new User(signupRequestDto);
         userRepository.save(user);
         return "success";
     }
 
     @Transactional(readOnly = true)
-    public void login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public String login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String username = loginRequestDto.getUsername();
         String password = loginRequestDto.getPassword();
 
@@ -73,8 +73,8 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(),user.getUserRoleEnum()));
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getUserRoleEnum()));
+        return "로그인 성공!";
     }
-
-
 }
+
