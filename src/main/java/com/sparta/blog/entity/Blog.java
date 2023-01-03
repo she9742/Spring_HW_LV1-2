@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -28,11 +30,12 @@ public class Blog extends Timestamped {
     @JoinColumn(name = "USER_ID", nullable = false) //유저아이디로 연관관계 지어준다~
     private User user;
 
+    @OneToMany(mappedBy = "blog",cascade = CascadeType.ALL)
+    private List<Comment> comment = new ArrayList<>();
 
 
     public Blog(BlogRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
-        this.username = requestDto.getUsername();
         this.contents = requestDto.getContents();
         this.user = user;
     }
