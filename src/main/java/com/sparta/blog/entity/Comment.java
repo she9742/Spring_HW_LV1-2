@@ -4,10 +4,12 @@ package com.sparta.blog.entity;
 import com.sparta.blog.dto.CommentRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter
+@Setter
 @Entity
 @NoArgsConstructor
 public class Comment extends Timestamped {
@@ -30,16 +32,19 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "USER_ID", nullable = false) //유저아이디로 연관관계 지어준다~
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "BLOG_ID",nullable = false)
+    private Blog blog;
 
 
-    public Comment(CommentRequestDto requestDto, User user ) {
-        this.title = requestDto.getTitle();
-        this.username = requestDto.getUsername();
+
+    public Comment(CommentRequestDto requestDto, User user, Blog blog ) {
+
         this.contents = requestDto.getContents();
+        this.blog = blog;
         this.user = user;
     }
     public void update(CommentRequestDto requestDto){
         this.contents = requestDto.getContents();
-        this.title = requestDto.getTitle();
     }
 }

@@ -2,10 +2,12 @@ package com.sparta.blog.controller;
 
 
 import com.sparta.blog.dto.CommentRequestDto;
-import com.sparta.blog.entity.Blog;
-import com.sparta.blog.entity.Comment;
+
+import com.sparta.blog.dto.CommentResponseDto;
 import com.sparta.blog.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,18 +19,20 @@ public class CommentController {
     private final CommentService commentService;
 
 
-    @PostMapping("/api/comments")
-    public Comment createComment(@RequestBody CommentRequestDto requestDto, HttpServletRequest request) {
-        return commentService.createComment(requestDto, request);
+    @PostMapping("/boards/{id}/comments")
+    public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long id, @RequestBody CommentRequestDto requestDto, HttpServletRequest request){
+        CommentResponseDto commentResponseDto = commentService.createComment(id,requestDto, request);
+        return ResponseEntity.status(HttpStatus.OK).body(commentResponseDto);
     }
 
-    @PutMapping("/api/comments/{id}")
-    public String updateComment(@PathVariable Long id, @RequestBody CommentRequestDto requestDto, HttpServletRequest request) {
-        return commentService.updateComment(id, requestDto, request);
+    @PutMapping("/comments/{commentId}")
+    public ResponseEntity<CommentResponseDto> updateComment( @RequestBody CommentRequestDto commentRequestDto, HttpServletRequest request, @PathVariable Long commentId ){
+        CommentResponseDto commentResponseDto = commentService.updateComment(commentRequestDto,request,commentId);
+        return ResponseEntity.status(HttpStatus.OK).body(commentResponseDto);
     }
 
-    @DeleteMapping("/api/comments/{id}")
-    public String deleteComment(@PathVariable Long id,HttpServletRequest request) {
-        return commentService.deleteComment(id, request);
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity deleteComment(HttpServletRequest request, @PathVariable Long commentId){
+        return commentService.deleteComment(request,commentId);
     }
 }
