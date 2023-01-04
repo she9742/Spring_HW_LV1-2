@@ -15,14 +15,10 @@ import javax.persistence.*;
 public class Comment extends Timestamped {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //vs AUTO 처음에 오토로 돼 있었는데 첫 번째 댓글인데 아이디 값이 2로 뜸 큰 문제는 아니지만 찝찝
+                                                         //아이덴티티로 바꾸니까 해결
     private Long id;
 
-    @Column(nullable = false)
-    private String title;
-
-    @Column(nullable = false)
-    private String username;
 
     @Column(nullable = false)
     private String contents;
@@ -39,7 +35,6 @@ public class Comment extends Timestamped {
 
 
     public Comment(CommentRequestDto requestDto, User user, Blog blog ) {
-
         this.contents = requestDto.getContents();
         this.blog = blog;
         this.user = user;

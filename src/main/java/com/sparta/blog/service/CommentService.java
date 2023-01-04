@@ -53,11 +53,12 @@ public class CommentService {
             commentRepository.save(comment);
             return new CommentResponseDto(comment);
         }
-        return null;
+        return null; // 토큰을 찾지 못했을 때 !
     }
 
     @Transactional
     public CommentResponseDto updateComment( CommentRequestDto requestDto, HttpServletRequest request,Long commentId) {
+
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new IllegalArgumentException("수정하려는 댓글이 없습니다.")
         );

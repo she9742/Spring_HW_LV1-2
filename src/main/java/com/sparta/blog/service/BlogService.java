@@ -55,7 +55,7 @@ public class BlogService{
             }else{
                 throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
             }
-            User user = userRepository.findByUsername(claims.getSubject()).orElseThrow( //로그인한 사람의 유저정보 담고 있다!
+            User user = userRepository.findByUsername(requestDto.getUsername()).orElseThrow( //로그인한 사람의 유저정보 담고 있다!
                     ()-> new IllegalArgumentException("사용자가 존재하지 않습니다.")); //유저아이디 정보도 담아야 해서
             Blog blog = new Blog(requestDto, user);
             blogRepository.save(blog); //디비에 저장!

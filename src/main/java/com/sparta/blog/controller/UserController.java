@@ -32,14 +32,13 @@ public class UserController {
 //        return new ModelAndView("login");
 //    }
     @PostMapping("/signup")
-    public ResponseEntity<SignupResponseDto> signup(@RequestBody SignupRequestDto requestDto){
+    public ResponseEntity<SignupResponseDto> signup(@RequestBody SignupRequestDto requestDto) {
         String msg = userService.signup(requestDto);
         SignupResponseDto responseDto = new SignupResponseDto(msg, HttpStatus.OK);
 
-        return new ResponseEntity<>(responseDto,HttpStatus.OK);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    @ResponseBody
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse response){
         String msg = userService.login(requestDto, response);
@@ -49,3 +48,5 @@ public class UserController {
         return new ResponseEntity<>(responseDto,HttpStatus.OK);
     }
 }
+
+
